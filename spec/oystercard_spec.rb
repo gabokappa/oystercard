@@ -6,6 +6,10 @@ describe Oystercard do
     expect(subject.balance).to eq (Oystercard::DEFAULTBALANCE)
   end
 
+  it "initializes with an empty journey history" do
+    expect(subject.journey_history).to be_empty 
+  end
+
   describe '#top_up' do
     it 'tops up the balance with 5 ' do
       expect{ subject.top_up 5 }.to change{ subject.balance }.by 5
@@ -51,19 +55,28 @@ end
     it "expects boolean variable journey to change from true to false" do
       subject.top_up(5)
       subject.touch_in(station)
-      subject.touch_out
+      subject.touch_out(station)
       expect(subject).not_to be_in_journey
     end
     it  "deducts balance by 1" do
       subject.top_up(5)
       subject.touch_in(station)
-      expect { subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MINIMUMFARE)
+      expect { subject.touch_out(station) }.to change{ subject.balance }.by(-Oystercard::MINIMUMFARE)
     end
     it "changes entry_station to nil" do
       subject.top_up(5)
       subject.touch_in(station)
-      subject.touch_out
+      subject.touch_out(station)
       expect(subject.entry_station).to eq nil
+    end
+    it "takes an exit station" do
+      expect(subject).to respond_to(:touch_out).with(1).argument
+    end
+    it "stores journey history" do
+      subject.top_up(5)
+      subject.touch_in(station)
+      subject.touch_out("Bank")
+      expect(subject.journey_history).to eq ({station => "Bank"})
     end
 
   end
