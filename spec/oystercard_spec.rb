@@ -7,7 +7,7 @@ describe Oystercard do
   end
 
   it "initializes with an empty journey history" do
-    expect(subject.journey_history).to be_empty 
+    expect(subject.journey_history).to be_empty
   end
 
   describe '#top_up' do
