@@ -28,8 +28,16 @@ class Oystercard
   end
 
   def touch_out
+    deduct(MINIMUMFARE)
+    # @balance -= MINIMUMFARE
     @journey = false
   end
-
   attr_reader :balance
+
+   private 
+
+  def deduct(money)
+    @balance -= money
+  end
+
 end
